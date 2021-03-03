@@ -4,11 +4,11 @@ on:
   repository_dispatch:
 #  release:
 #    types: published
-  push:
-    branches:
-      - master
-    paths:
-      - 'GDock/GDock.config'
+#  push:
+#    branches:
+#      - master
+#    paths:
+#      - 'GDock/GDock.config'
 #  schedule:
 #    - cron: 0 16 * * *
 #  watch:

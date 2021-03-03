@@ -18,7 +18,7 @@ on:
 #    branches:
 #      - master
 #    paths:
-      - 'NewifiD2/NewifiD2_lite.config'
+#      - 'NewifiD2/NewifiD2_lite.config'
 #  watch:
 #    types: started
 
