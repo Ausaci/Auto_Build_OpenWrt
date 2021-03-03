@@ -178,4 +178,4 @@ jobs:
     
     - name: WeChat notification
       if: steps.organize.outputs.status == 'success' && !cancelled()
-      run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.PRODUCT_NAME }}ARMv8_Firmwares 打包完成
+      run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.PRODUCT_NAME }} 打包完成
