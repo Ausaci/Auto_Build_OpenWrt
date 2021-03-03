@@ -9,16 +9,41 @@
 #============================================================
 
 # Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+#sed -i 's/192.168.1.1/192.168.11.1/g' package/base-files/files/bin/config_generate
+
+# Modify hostname
+#sed -i 's/OpenWrt/Newifi-D2(Device_name)/g' package/base-files/files/bin/config_generate
+
+# Modify the version number
+#sed -i "s/OpenWrt /Ausaci build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/lean/default-settings/files/zzz-default-settings
+
+# Modify Timezone
+# sed -i "s/timezone='UTC'/timezone='CST-8'/" package/base-files/files/bin/config_generate
+# sed -i "/timezone='CST-8'/a set system.@system[-1].zonename='Asia/Shanghai'" ./package/base-files/files/bin/config_generate
+
+# Modify Firewall custom
+# echo "iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE" >> package/network/config/firewall/files/firewall.user
+
+# Modify default theme
+sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+
+# Add kernel build user
+#[ -z $(grep "CONFIG_KERNEL_BUILD_USER=" .config) ] &&
+#    echo 'CONFIG_KERNEL_BUILD_USER="Ausaci"' >>.config ||
+#    sed -i 's@\(CONFIG_KERNEL_BUILD_USER=\).*@\1$"Ausaci"@' .config
+
+# Add kernel build domain
+#[ -z $(grep "CONFIG_KERNEL_BUILD_DOMAIN=" .config) ] &&
+#    echo 'CONFIG_KERNEL_BUILD_DOMAIN="GitHub Actions"' >>.config ||
+#    sed -i 's@\(CONFIG_KERNEL_BUILD_DOMAIN=\).*@\1$"GitHub Actions"@' .config
+
 #移除不用软件包    
-rm -rf package/lean/luci-app-dockerman
-rm -rf package/lean/luci-app-wrtbwmon
+#rm -rf package/lean/luci-app-dockerman
+#rm -rf package/lean/luci-app-wrtbwmon
+
 #添加额外软件包
 git clone https://github.com/destan19/OpenAppFilter.git package/OpenAppFilter
-
-
-
-git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git package/luci-app-jd-dailybonus
+#git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git package/luci-app-jd-dailybonus
 git clone https://github.com/jerrykuku/luci-app-ttnode.git package/luci-app-ttnode
 git clone https://github.com/jerrykuku/lua-maxminddb.git package/lua-maxminddb
 git clone https://github.com/jerrykuku/luci-app-vssr.git package/luci-app-vssr
@@ -33,7 +58,9 @@ git clone https://github.com/project-lede/luci-app-godproxy package/luci-app-god
 #git clone https://github.com/vernesong/OpenClash.git package/OpenClash
 #cp -r package/OpenClash/luci-app-openclash package/
 #rm -rf package/OpenClash
+
 svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
+
 # 编译 po2lmo (如果有po2lmo可跳过)
 pushd package/luci-app-openclash/tools/po2lmo
 make && sudo make install
@@ -63,6 +90,7 @@ git clone https://github.com/brvphoenix/luci-app-wrtbwmon
 cd luci-app-wrtbwmon
 git reset --hard ff7773abbf71120fc39a276393b29ba47353a7e2 && cp -r luci-app-wrtbwmon ../package/
 cd ..
+
 # themes
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-theme-darkmatter package/luci-theme-darkmatter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-theme-Butterfly-dark package/luci-theme-Butterfly-dark
