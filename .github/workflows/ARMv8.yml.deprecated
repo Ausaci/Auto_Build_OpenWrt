@@ -1,18 +1,26 @@
-name: ARMv8
+name: ARMv8_deorecated
 
 on:
   repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+#  schedule:
+#    - cron: 0 16 * * *
+
 #  release:
 #    types: published
-  push:
-    branches:
-      - master
-    paths:
-      - 'aarch64/ARMv8.config'
-  schedule:
-    - cron: 0 16 * * *
-  watch:
-    types: started
+#  push:
+#    branches:
+#      - master
+#    paths:
+#      - 'aarch64/ARMv8.config'
+#  watch:
+#    types: started
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -25,7 +33,6 @@ env:
   Update_Ver_SH: aarch64/autoVersion.sh
   Get_Imgs_SH: aarch64/getImgs.sh
   DOCKER_BUILD_SH: buildImage.sh
-#   SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_COWTRANSFER: false
@@ -33,14 +40,16 @@ env:
   TZ: Asia/Shanghai
   FILE_NAME: ARMv8
   PRODUCT_NAME: ARMv8
+
 jobs:
   build:
     runs-on: ubuntu-18.04
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-    #- name: WeChat notification
-    #  run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.FILE_NAME }}开始编译
+
+#    - name: WeChat notification
+#      run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.FILE_NAME }}_Compile_Start
       
     - name: Checkout
       uses: actions/checkout@master
@@ -74,12 +83,12 @@ jobs:
 #        echo "::set-env name=useVersionInfo::$useVersionInfo"
 #        echo "::set-env name=DATE::$(date "+%Y-%m-%d %H:%M:%S")"
 
-    #- name: Load custom feeds
-    #  run: |
-    #    [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-    #    chmod +x $DIY_P1_SH
-    #    cd openwrt
-    #    ../$DIY_P1_SH
+    - name: Load custom feeds
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        chmod +x $DIY_P1_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P1_SH
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -94,12 +103,15 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
-        sed -i 's/192.168.1.1/192.168.123.1/g' package/base-files/files/bin/config_generate
-        sed -i 's/OpenWrt/MRG AutoBuild ${{ env.DATE1 }} @ OpenWrt/g' package/lean/default-settings/files/zzz-default-settings
+#        sed -i 's/192.168.1.1/192.168.11.1/g' package/base-files/files/bin/config_generate
+#        sed -i 's/OpenWrt/MRG AutoBuild ${{ env.DATE1 }} @ OpenWrt/g' package/lean/default-settings/files/zzz-default-settings
         
-#     - name: SSH connection to Actions
-#       uses: P3TERX/debugger-action@master
-#       if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: Download package
       id: package
@@ -190,7 +202,7 @@ jobs:
         commit: master
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          默认IP：192.168.123.1 默认密码： password
+          默认IP：192.168.11.1 默认密码： password
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*

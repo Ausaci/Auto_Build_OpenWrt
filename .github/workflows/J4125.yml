@@ -43,7 +43,7 @@ jobs:
 
     steps:
 #    - name: WeChat notification
-#      run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.FILE_NAME }}开始编译
+#      run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.FILE_NAME }}_Compile_Start
       
     - name: Checkout
       uses: actions/checkout@master

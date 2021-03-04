@@ -36,7 +36,7 @@ jobs:
 
     steps:
     #- name: WeChat notification
-    #  run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.FILE_NAME }}开始编译
+    #  run: curl https://sc.ftqq.com/${{ secrets.ServerChan }}.send?text=${{ env.FILE_NAME }}_Compile_Start
       
     - name: Checkout
       uses: actions/checkout@master
@@ -156,7 +156,7 @@ jobs:
         commit: master
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          默认IP： 192.168.7.1 默认密码： password
+          默认IP： 192.168.11.1 默认密码： password
           当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
