@@ -24,7 +24,7 @@ env:
   DIY_P2_SH: diy-part2.sh
   MRG_ADD_SH: aarch64/ARMv8.sh
   Update_Ver_SH: aarch64/autoVersion.sh
-  Get_Imgs_SH: aarch64/get_Armbian_Buster.sh
+  Get_Bstr_SH: aarch64/get_Armbian_Buster.sh
   DOCKER_BUILD_SH: buildImage.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
@@ -76,12 +76,12 @@ jobs:
 #        echo "::set-env name=useVersionInfo::$useVersionInfo"
 #        echo "::set-env name=DATE::$(date "+%Y-%m-%d %H:%M:%S")"
 
-    - name: Build firmware
-      id: build
+    - name: Download firmware
+      id: download
       run: |
         cd /opt
-        chmod +x $GITHUB_WORKSPACE/$Get_Imgs_SH
-        sudo $GITHUB_WORKSPACE/$Get_Imgs_SH
+        chmod +x $GITHUB_WORKSPACE/$Get_Bstr_SH
+        sudo $GITHUB_WORKSPACE/$Get_Bstr_SH
         sudo tar xvzf *.tar.gz
         sudo mkdir imgs
         sudo xz -d Armbian*Aml*\+\.img\.xz
@@ -95,6 +95,11 @@ jobs:
         sudo mv *.img imgs
         cd /opt/openwrt
         sudo wget $(curl -s https://api.github.com/repos/Ausaci/Auto_Build_OpenWrt/releases/39173638 | grep browser_download_url | cut -d '"' -f 4)
+
+    - name: Build firmware
+      id: build
+      run: |
+        cd /opt/openwrt
         chmod +x $GITHUB_WORKSPACE/$Update_Ver_SH
         sudo $GITHUB_WORKSPACE/$Update_Ver_SH
         sudo ./mk_rk3328_beikeyun.sh

@@ -31,7 +31,7 @@ env:
   DIY_P2_SH: diy-part2.sh
   MRG_ADD_SH: aarch64/ARMv8.sh
   Update_Ver_SH: aarch64/autoVersion.sh
-  Get_Imgs_SH: aarch64/getImgs.sh
+  Get_Bstr_SH: aarch64/getImgs.sh
   DOCKER_BUILD_SH: buildImage.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
@@ -139,8 +139,8 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd /opt
-        chmod +x $GITHUB_WORKSPACE/$Get_Imgs_SH
-        sudo $GITHUB_WORKSPACE/$Get_Imgs_SH
+        chmod +x $GITHUB_WORKSPACE/$Get_Bstr_SH
+        sudo $GITHUB_WORKSPACE/$Get_Bstr_SH
         sudo tar xvzf *.tar.gz
         sudo mkdir imgs
         sudo xz -d Armbian*Aml*\+o*
