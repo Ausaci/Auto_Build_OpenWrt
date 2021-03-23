@@ -28,14 +28,14 @@
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 
 # Add kernel build user
-#[ -z $(grep "CONFIG_KERNEL_BUILD_USER=" .config) ] &&
-#    echo 'CONFIG_KERNEL_BUILD_USER="Ausaci"' >>.config ||
-#    sed -i 's@\(CONFIG_KERNEL_BUILD_USER=\).*@\1$"Ausaci"@' .config
+[ -z $(grep "CONFIG_KERNEL_BUILD_USER=" .config) ] &&
+    echo 'CONFIG_KERNEL_BUILD_USER="Ausaci"' >>.config ||
+    sed -i 's@\(CONFIG_KERNEL_BUILD_USER=\).*@\1"Ausaci"@' .config
 
 # Add kernel build domain
-#[ -z $(grep "CONFIG_KERNEL_BUILD_DOMAIN=" .config) ] &&
-#    echo 'CONFIG_KERNEL_BUILD_DOMAIN="GitHub Actions"' >>.config ||
-#    sed -i 's@\(CONFIG_KERNEL_BUILD_DOMAIN=\).*@\1$"GitHub Actions"@' .config
+[ -z $(grep "CONFIG_KERNEL_BUILD_DOMAIN=" .config) ] &&
+    echo 'CONFIG_KERNEL_BUILD_DOMAIN="GitHub Actions"' >>.config ||
+    sed -i 's@\(CONFIG_KERNEL_BUILD_DOMAIN=\).*@\1"GitHub Actions"@' .config
 
 #移除不用软件包    
 rm -rf package/lean/luci-app-dockerman
